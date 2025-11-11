@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>17 - Tug'ilgan kun muborak!</title>
+<style>
+  :root{
+    --bg1:#081221;
+    --bg2:#0f2130;
+    --paper:#f6ecdb;
+    --gold:#e0a24a;
+    --cream1:#f9e6d6;
+    --cream2:#f2c9ad;
+    --choco:#6b3b1a;
+    --accent:#ffcf6b;
+  }
+  html,body{height:100%;margin:0;font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;background:
+    radial-gradient(900px 400px at 10% 10%, rgba(16,30,44,0.35), transparent 15%),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box}
+
+  /* sahna */
+  .stage{ width:920px; max-width:96vw; position:relative; display:flex;align-items:center;justify-content:center; gap:24px; flex-direction:column; }
+
+  /* realistic cake container */
+  .cake-wrap{ position:relative; width:640px; max-width:88vw; height:auto; display:flex;align-items:center;justify-content:center; }
+  .cake{
+    width:560px; max-width:88vw; height:320px; position:relative; border-radius:28px; box-shadow:
+    0 30px 60px rgba(1,6,12,0.7), 0 6px 20px rgba(2,8,18,0.5);
+    transform-origin:center bottom;
+  }
+
+  /* bottom plate */
+  .plate{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:-40px;
+    width:78%; height:40px; border-radius:40px; background: linear-gradient(180deg,#f3f1ef,#e2d7c8);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(0,0,0,0.05);
+    z-index:1;
+  }
+
+  /* cake layers */
+  .layer{
+    position:absolute; left:50%; transform:translateX(-50%); width:86%; border-radius:18px;
+    box-shadow: inset 0 -6px 18px rgba(255,255,255,0.03);
+  }
+  .layer.bottom{
+    bottom:18px; height:160px; background: linear-gradient(180deg,#6b3b1a,#5a3316);
+    border: 6px solid rgba(0,0,0,0.08);
+    z-index:2; overflow:hidden;
+  }
+  .layer.middle{
+    bottom:78px; height:110px; background: linear-gradient(180deg,var(--cream2),var(--cream1));
+    border: 5px solid rgba(255,255,255,0.03); z-index:3;
+  }
+  .layer.top{
+    bottom:154px; height:62px; background: linear-gradient(180deg,#fff6ef,#ffe9d6);
+    border-radius:14px; z-index:4;
+  }
+
+  /* realistic frosting drip */
+  .drip{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:150px; width:84%; height:36px; z-index:5;
+    background: linear-gradient(180deg,#fff7f0,#ffe4cf);
+    border-radius:18px;
+    box-shadow: inset 0 -6px 14px rgba(0,0,0,0.04);
+  }
+  .drip:after{
+    content:""; position:absolute; left:6%; top:18px; width:14%; height:32px; background: radial-gradient(circle at 30% 30%, #fff,#ffe7d6);
+    border-radius: 10px 10px 30px 30px;
+    transform: rotate(-6deg);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.18);
+  }
+  .drip:before{
+    content:""; position:absolute; right:6%; top:18px; width:18%; height:28px; background: radial-gradient(circle at 30% 30%, #fff,#ffe7d6);
+    border-radius: 10px 10px 30px 30px;
+    transform: rotate(6deg);
+  }
+
+  /* Happy Birthday yozuvi tort ustida */
+  .message-on-cake{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:190px; z-index:6;
+    font-family: "Georgia", serif; font-weight:700; font-size:34px; color: #5a2f18;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.35);
+    letter-spacing:1px;
+    pointer-events:none;
+  }
+
+  /* sham (olov bilan) — markaziy joyda "Happy Birthday" ustida */
+  .candle{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:230px; z-index:8;
+    width:22px; height:54px; border-radius:6px; background: linear-gradient(180deg,#ffd9aa,#ffb86b);
+    display:flex;align-items:flex-start;justify-content:center; flex-direction:column;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.45);
+    cursor:pointer;
+  }
+  .candle .wick{ width:3px; height:10px; background:#2b2b2b; margin-top:6px; border-radius:2px; box-shadow: inset 0 -2px 0 rgba(255,255,255,0.08); }
+  .candle .flame{
+    margin-top:-6px; width:18px; height:26px; border-radius:50% 50% 40% 40%; position:relative;
+    transform-origin:center bottom; animation: flick 260ms infinite;
+  }
+  .flame .inner{ position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); width:8px; height:12px; border-radius:50%; background: radial-gradient(circle at 40% 30%, #fff9d2,#ffd85b 40%, #ff8f00 70%); box-shadow: 0 6px 16px rgba(255,140,30,0.22); }
+  .flame .outer{ position:absolute; left:50%; top:8%; transform:translateX(-50%); width:18px; height:28px; border-radius:50% 50% 40% 40%; background: linear-gradient(180deg,#ffd78a,#ff9d2e); opacity:0.95; }
+
+  @keyframes flick{
+    0%{ transform: translateY(0) scaleY(1); opacity:1; }
+    50%{ transform: translateY(-2px) scaleY(1.06); opacity:.95; }
+    100%{ transform: translateY(0) scaleY(1); opacity:1; }
+  }
+
+  /* When extinguished */
+  .flame.off{ opacity:0; transform:scaleY(.6) translateY(8px); transition:opacity .6s ease, transform .6s ease; }
+  .candle.extinguished{ filter:grayscale(.2) brightness(.95); }
+
+  /* cake vanish */
+  .cake.hide{ opacity:0; transform: translateY(40px) scale(.7) rotate(-4deg); transition: all .9s cubic-bezier(.2,.9,.2,1); pointer-events:none; }
+
+  /* fireworks canvas covers area */
+  #fw{ position:absolute; left:0; top:0; width:100%; height:100%; z-index:9; pointer-events:none; }
+
+  /* Big celebration text */
+  .big-text{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.85); z-index:10; text-align:center;
+    font-family: "Impact", "Segoe UI", Arial, sans-serif; color: #ffdca8;
+    text-shadow: 0 6px 28px rgba(0,0,0,0.6);
+    font-size:84px; letter-spacing:6px; opacity:0; transform-origin:center;
+    transition: all .9s cubic-bezier(.2,.9,.2,1);
+    white-space:nowrap;
+  }
+  .big-text.show{ opacity:1; transform:translate(-50%,-50%) scale(1.06); animation: popText .9s cubic-bezier(.2,.9,.2,1); }
+  @keyframes popText{
+    0%{ transform:translate(-50%,-50%) scale(.4); opacity:0; filter:blur(6px); }
+    60%{ transform:translate(-50%,-50%) scale(1.08); opacity:1; filter:blur(0); }
+    100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  }
+
+  /* parchment-bottom (pastki o'rtada) */
+  .parch{
+    position: absolute; left:50%; transform:translateX(-50%); bottom:18px; z-index:11;
+    width:78%; max-width:860px; min-height:110px; padding:20px 28px; border-radius:12px;
+    background: linear-gradient(180deg,#f7efdc,#efe0c3); color:#4a2f17; box-shadow: 0 18px 48px rgba(0,0,0,0.5);
+    border:6px solid rgba(120,90,60,0.07); font-family: "Georgia", serif; font-size:18px; line-height:1.5;
+    opacity:0; transform-origin:center bottom; transition: all .9s ease;
+  }
+  .parch.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  /* small hint */
+  .hint{ position: absolute; top:12px; right:18px; color:#bcd0e6; opacity:.8; font-size:13px; z-index:20; }
+
+  /* responsive */
+  @media (max-width:720px){
+    .cake{ width:86%; height:260px; }
+    .message-on-cake{ font-size:22px; bottom:160px;}
+    .candle{ bottom:200px; height:46px; width:18px;}
+    .flame .outer{ width:14px; height:22px;}
+    .big-text{ font-size:48px; letter-spacing:3px; }
+    .parch{ font-size:16px; padding:14px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage" id="stage" aria-live="polite">
+    
+
+    <div class="cake-wrap" id="cakeWrap" role="button" aria-pressed="false" tabindex="0">
+      <canvas id="fw"></canvas>
+
+      <div class="cake" id="cake">
+        <div class="plate" aria-hidden="true"></div>
+
+        <div class="layer bottom" aria-hidden="true">
+          <!-- subtle decoration -->
+        </div>
+
+        <div class="layer middle" aria-hidden="true"></div>
+
+        <div class="drip" aria-hidden="true"></div>
+
+        <div class="layer top" aria-hidden="true"></div>
+
+        <div class="message-on-cake" id="cakeText">Happy Birthday</div>
+
+        <!-- candle centered over the writing -->
+        <div class="candle" id="candle" title="Bosish/teging — shamni o'chirish uchun" aria-label="Sham" role="switch" aria-checked="false">
+          <div class="flame" id="flame">
+            <div class="outer"></div>
+            <div class="inner"></div>
+          </div>
+          <div class="wick" aria-hidden="true"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Big celebration text (initially hidden) -->
+    <div class="big-text" id="bigText" aria-hidden="true">17-YOSHING MUBORAK</div>
+
+    <!-- Parchment (pastki o'rta) -->
+    <div class="parch" id="parchment" aria-hidden="true">
+      <!-- Text will be filled by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+/* Interaktivlik va animatsiyalar:
+   - Candle (sham) ustiga bosilganda: olov v.b. o'chadi, cake yo'qoladi (sekin), fireworks ishga tushadi,
+     katta "17 YOSHING MUBORAK" matni paydo bo'ladi va pastki parchmentda tabrik matni chiqadi.
+*/
+
+/* Elements */
+const cakeWrap = document.getElementById('cakeWrap');
+const candle = document.getElementById('candle');
+const flame = document.getElementById('flame');
+const cake = document.getElementById('cake');
+const fw = document.getElementById('fw');
+const bigText = document.getElementById('bigText');
+const parchment = document.getElementById('parchment');
+
+let used=false; 
+
+/* Tabrik matni (o'zim yozgan, kerak bo'lsa o'zgartirish mumkin) */
+const myGreeting = `
+
+  Senga chin dildan 17 yosh muborak tilayman! Bu yosh — yangi boshlanishlar, qiziqarli imkoniyatlar va ulkan yutuqlar yoshi.
+  Har bir kuning baxt, sog'liq va ilhom bilan to'lsin. Orzularing rost bo'lsin, harakatdan to'xtama.
+  <br><br>
+  Qizg'in tabriklar bilan — <strong>Seni chin yurakdan muborakbod etaman!</strong>
+`;
+
+/* Candle click / touch handler */
+function igniteClick(e){
+  if (used) return;
+  used=true;
+
+  // extinguish flame visual
+  flame.classList.add('off');
+  candle.classList.add('extinguished');
+  candle.setAttribute('aria-checked','true');
+
+  // cake vanish slightly delayed
+  setTimeout(()=> cake.classList.add('hide'), 220);
+
+  // start fireworks
+  startFireworks();
+
+  // show big text with slight delay
+  setTimeout(()=> {
+    bigText.classList.add('show');
+    bigText.setAttribute('aria-hidden','false');
+    // letter-by-letter shimmer
+    animateBigText();
+  }, 700);
+
+  // show parchment at bottom with typewriter effect
+  setTimeout(()=> showParchment(), 1300);
+}
+
+/* Keyboard accessibility */
+cakeWrap.addEventListener('keydown', (e)=>{
+  if (e.key==='Enter' || e.key===' ') { e.preventDefault(); igniteClick(); }
+});
+
+/* Click/touch support */
+candle.addEventListener('click', igniteClick);
+candle.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); igniteClick(); }, {passive:false});
+cakeWrap.addEventListener('click', (ev)=> {
+  // allow click on cake area as well
+  if (!ev.target.closest('#candle')) igniteClick();
+});
+cakeWrap.addEventListener('touchstart', (ev)=> {
+  if (!ev.target.closest('#candle')) { ev.preventDefault(); igniteClick(); }
+}, {passive:false});
+
+/* ------------------ Fireworks (canvas) ------------------ */
+const ctx = fw.getContext('2d');
+let W = fw.width = cakeWrap.clientWidth;
+let H = fw.height = cakeWrap.clientHeight;
+
+function resize(){
+  W = fw.width = cakeWrap.clientWidth;
+  H = fw.height = cakeWrap.clientHeight;
+}
+window.addEventListener('resize', resize);
+
+let rockets = [], particles = [], running=false;
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+function launchRocket(x=null){
+  rockets.push({
+    x: x===null? rand(W*0.25,W*0.75) : x,
+    y: H + 10,
+    vx: rand(-1,1),
+    vy: rand(-11,-14),
+    explodeHeight: rand(H*0.18, H*0.45),
+    hue: Math.floor(rand(0,360)),
+  });
+}
+
+function createParticles(x,y,hue){
+  const count = Math.floor(rand(28,60));
+  for (let i=0;i<count;i++){
+    const angle = Math.PI*2 * Math.random();
+    const speed = Math.random()*6 + 1.5;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      life: rand(60,150),
+      age:0,
+      hue: (hue + rand(-50,50))|0,
+      size: rand(1,3.6)
+    });
+  }
+}
+
+/* animation loop */
+function frame(){
+  if (!running) return;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = 'rgba(8,10,16,0.18)';
+  ctx.fillRect(0,0,W,H);
+
+  // rockets
+  for (let i=rockets.length-1;i>=0;i--){
+    const r = rockets[i];
+    r.vy += 0.18;
+    r.x += r.vx; r.y += r.vy;
+
+    ctx.beginPath();
+    ctx.moveTo(r.x, r.y);
+    ctx.lineTo(r.x - r.vx*5, r.y - r.vy*5);
+    ctx.strokeStyle = `hsl(${r.hue},100%,70%)`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (r.vy >= 0 || r.y <= r.explodeHeight){
+      createParticles(r.x, r.y, r.hue);
+      rockets.splice(i,1);
+    }
+  }
+
+  // particles
+  for (let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.vy += 0.06;
+    p.vx *= 0.995; p.vy *= 0.995;
+    p.x += p.vx; p.y += p.vy; p.age++;
+
+    const alpha = Math.max(0, 1 - p.age/p.life);
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle = `hsla(${p.hue},95%,60%,${alpha})`;
+    ctx.fill();
+
+    if (p.age >= p.life) particles.splice(i,1);
+  }
+
+  if (Math.random() < 0.08) launchRocket();
+
+  requestAnimationFrame(frame);
+}
+
+let fwTimeout=null;
+function startFireworks(){
+  if (running) return;
+  running=true;
+  resize();
+  for (let i=0;i<6;i++) setTimeout(()=> launchRocket(), i*200);
+
+  frame();
+  clearTimeout(fwTimeout);
+  fwTimeout = setTimeout(()=> stopFireworks(), 7200);
+}
+function stopFireworks(){
+  running=false;
+  const fade = setInterval(()=>{
+    ctx.fillStyle = 'rgba(6,8,14,0.18)';
+    ctx.fillRect(0,0,W,H);
+    if (particles.length===0 && rockets.length===0){
+      clearInterval(fade);
+    }
+  }, 220);
+}
+
+/* ------------------ Big text shimmer (per-letter effect) ------------------ */
+function animateBigText(){
+  const el = bigText;
+  const text = el.textContent.trim();
+  el.innerHTML = '';
+  for (let i=0;i<text.length;i++){
+    const sp = document.createElement('span');
+    sp.textContent = text[i];
+    sp.style.display = 'inline-block';
+    sp.style.transform = 'translateY(8px)';
+    sp.style.opacity = '0';
+    sp.style.transition = `all 480ms cubic-bezier(.2,.9,.2,1) ${i*24}ms`;
+    el.appendChild(sp);
+  }
+  // trigger
+  setTimeout(()=> {
+    const spans = el.querySelectorAll('span');
+    spans.forEach(s=>{
+      s.style.transform = 'translateY(0)';
+      s.style.opacity = '1';
+      s.style.textShadow = '0 6px 20px rgba(0,0,0,0.6)';
+    });
+  },50);
+}
+
+/* ------------------ Parchment typewriter ------------------ */
+function showParchment(){
+  parchment.innerHTML = '';
+  parchment.classList.add('show');
+  parchment.setAttribute('aria-hidden','false');
+
+  // simple typewriter with HTML allowed
+  const temp = document.createElement('div');
+  temp.innerHTML = myGreeting;
+  const full = temp.innerHTML;
+  let idx=0;
+  const speed = 14;
+  const typer = setInterval(()=>{
+    idx++;
+    parchment.innerHTML = full.slice(0,idx);
+    if (idx >= full.length) clearInterval(typer);
+  }, speed);
+}
+
+/* make flame visible on load */
+window.addEventListener('load', ()=>{
+  flame.style.opacity = 1;
+});
+
+/* Ensure canvas covers wrap */
+resize();
+
+/* Accessibility: focus outline */
+cakeWrap.addEventListener('focus', ()=> cakeWrap.style.outline='2px solid rgba(255,255,255,0.06)');
+cakeWrap.addEventListener('blur', ()=> cakeWrap.style.outline='none');
+
+</script>
+</body>
+</html>
