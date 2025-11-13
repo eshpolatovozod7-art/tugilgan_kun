@@ -120,14 +120,34 @@
   #fw{ position:absolute; left:0; top:0; width:100%; height:100%; z-index:9; pointer-events:none; }
 
   /* Big celebration text */
-  .big-text{
-    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.85); z-index:10; text-align:center;
-    font-family: "Impact", "Segoe UI", Arial, sans-serif; color: #ffdca8;
-    text-shadow: 0 6px 28px rgba(0,0,0,0.6);
-    font-size:84px; letter-spacing:6px; opacity:0; transform-origin:center;
-    transition: all .9s cubic-bezier(.2,.9,.2,1);
-    white-space:nowrap;
+  ..big-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(.85);
+  z-index: 10;
+  text-align: center;
+  font-family: "Impact", "Segoe UI", Arial, sans-serif;
+  color: #ffdca8;
+  text-shadow: 0 6px 28px rgba(0,0,0,0.6);
+  font-size: 84px;
+  letter-spacing: 6px;
+  opacity: 0;
+  transform-origin: center;
+  transition: all .9s cubic-bezier(.2,.9,.2,1);
+  white-space: nowrap;
+}
+
+/* 📱 768px dan kichik ekranlarda (telefonlarda) */
+@media (max-width: 768px) {
+  .big-text {
+    font-size: 40px;   /* kichikroq shrift */
+    letter-spacing: 3px;
   }
+}
+
+
+
   .big-text.show{ opacity:1; transform:translate(-50%,-50%) scale(1.06); animation: popText .9s cubic-bezier(.2,.9,.2,1); }
   @keyframes popText{
     0%{ transform:translate(-50%,-50%) scale(.4); opacity:0; filter:blur(6px); }
@@ -196,7 +216,7 @@
     </div>
 
     <!-- Big celebration text (initially hidden) -->
-    <div class="big-text" id="bigText" aria-hidden="true"> fghtttt       17-YOSHING MUBORAK  uyfuyfuyfuyfuyfuyffuy</div>
+    <div class="big-text" id="bigText" aria-hidden="true">       17-YOSHING MUBORAK  </div>
 
     <!-- Parchment (pastki o'rta) -->
     <div class="parch" id="parchment" aria-hidden="true">
@@ -224,7 +244,7 @@ let used=false;
 
 /* Tabrik matni (o'zim yozgan, kerak bo'lsa o'zgartirish mumkin) */
 const myGreeting = `
-Qadrli Roila
+Qadrli Roila.
 
   Senga chin dildan 17 yoshing muborak bo'lsin! Bu yoshing — yangi boshlanishlar, qiziqarli imkoniyatlar va ulkan yutuqlar yoshi bo'lsin.
   Har bir kuning baxt, sog'liq va ilhom bilan to'lsin. Orzularing rost bo'lsin, harakatdan to'xtama.
@@ -446,6 +466,7 @@ cakeWrap.addEventListener('blur', ()=> cakeWrap.style.outline='none');
 </script>
 </body>
 </html>
+
 
 
 
