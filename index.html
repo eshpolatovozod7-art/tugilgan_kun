@@ -119,8 +119,8 @@
   /* fireworks canvas covers area */
   #fw{ position:absolute; left:0; top:0; width:100%; height:100%; z-index:9; pointer-events:none; }
 
-  /* Big celebration text */
-  ..big-text {
+  768px) {
+  .big-text {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -130,21 +130,25 @@
   font-family: "Impact", "Segoe UI", Arial, sans-serif;
   color: #ffdca8;
   text-shadow: 0 6px 28px rgba(0,0,0,0.6);
-  font-size: 84px;
-  letter-spacing: 6px;
+  
+  font-size: 64px;        /* avval 84px edi — o‘rtacha kattalik */
+  letter-spacing: 5px;
   opacity: 0;
   transform-origin: center;
   transition: all .9s cubic-bezier(.2,.9,.2,1);
   white-space: nowrap;
 }
 
-/* 📱 768px dan kichik ekranlarda (telefonlarda) */
+/* 📱 Telefonlar uchun biroz kichikroq, lekin o‘qilishi yaxshi */
 @media (max-width: 768px) {
   .big-text {
-    font-size: 40px;   /* kichikroq shrift */
-    letter-spacing: 3px;
+    font-size: 48px;
+    letter-spacing: 4px;
   }
 }
+
+
+
 
 
 
@@ -466,6 +470,7 @@ cakeWrap.addEventListener('blur', ()=> cakeWrap.style.outline='none');
 </script>
 </body>
 </html>
+
 
 
 
